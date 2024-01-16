@@ -12,6 +12,7 @@ public class Plugin : BaseUnityPlugin
     public static Plugin Instance;
     private readonly Harmony _harmony = new(PluginInfo.PLUGIN_GUID);
     [NotNull] public static ManualLogSource Log { get; private set; }
+    public static Configuration configuration;
 
     private async void Awake()
     {
@@ -19,6 +20,8 @@ public class Plugin : BaseUnityPlugin
 
         _harmony.PatchAll(typeof(Plugin));
         Log = Logger;
+
+        configuration = new(Config);
 
         await DiscordAPI.Main(Log);
 

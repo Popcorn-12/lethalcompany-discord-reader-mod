@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
@@ -33,8 +32,7 @@ public class DiscordAPI
         _client.MessageReceived += MessageReceivedAsync;
 
         // Tokens should be considered secret data, and never hard-coded.
-        // TODO create config.cfg within BeplinEx folder and load token from that.
-        await _client.LoginAsync(TokenType.Bot, "<TODO>");
+        await _client.LoginAsync(TokenType.Bot, Plugin.configuration.DiscordBotToken);
 
         await _client.StartAsync();
 
