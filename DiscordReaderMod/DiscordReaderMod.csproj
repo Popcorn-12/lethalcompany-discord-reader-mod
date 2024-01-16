@@ -18,7 +18,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="BepInEx.Analyzers" Version="1.*" IncludeAssets="compile" />
+		<PackageReference Include="BepInEx.Analyzers" Version="1.*" IncludeAssets="compile" PrivateAssets="all" />
 		<PackageReference Include="BepInEx.Core" Version="5.*" IncludeAssets="compile" />
 		<PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" IncludeAssets="all" />
 		<PackageReference Include="Discord.Net" Version="3.13.0" IncludeAssets="all"/>

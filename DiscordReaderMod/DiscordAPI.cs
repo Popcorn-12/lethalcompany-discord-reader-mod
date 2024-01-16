@@ -11,10 +11,11 @@ public class DiscordAPI
 {
     private static DiscordSocketClient _client;
     private static ManualLogSource _log;
-    private static string _channel_read;
+    private static string _channelRead;
     // Generic non whitespace username colon any message regex
-    private static string message_pattern = @"[\S]+:[\s\S]+";
-    private static Regex message_regex = new Regex(message_pattern);
+    private static string messagePattern = @"[\S]+:[\s\S]+";
+    private static Regex messageRegex = new Regex(messagePattern);
+    private static string mapUserHelpMsg = "Please enter steamUserName and discordUsername. Ex: !lcmapuser steamUsername=discordUsername";
 
     public static async Task Main(ManualLogSource Log)
     {
@@ -67,35 +68,63 @@ public class DiscordAPI
 
     private static async Task MessageReceivedAsync(SocketMessage message)
     {
-        _log.LogInfo("Discord debug on message rec: " + message.ToString());
+        _log.LogDebug("Discord debug on message rec: " + message.ToString());
         // The bot should never respond to itself.
         if (message.Author.Id == _client.CurrentUser.Id)
             return;
 
-        if (message.Content == "!testlethalcompany")
+        if (message.Content == "!lctest")
         {
             await message.Channel.SendMessageAsync("Hey there you have successfully tested Lethal Company Discord Bot.");
             return;
         }
 
-        if (message.Content == "!lethalcompanyreader")
+        if (message.Content == "!lcreader")
         {
-            _channel_read = message.Channel.Name;
+            _channelRead = message.Channel.Name;
             await message.Channel.SendMessageAsync("Lethal Company Bot will listen to this channel.");
             return;
         }
 
-        if (message.Channel.Name.Equals(_channel_read))
+        if (message.Content == "!lcmapuser")
         {
-            await message.Channel.SendMessageAsync("TODO... Heres what I received for: " + message.CleanContent);
+            await message.Channel.SendMessageAsync(mapUserHelpMsg);
+        }
+        else if (message.Content.StartsWith("!lcmapuser"))
+        {
+            try
+            {
+                string[] getMessage = message.Content.Split(" ");
+                if (getMessage.Length != 2 && getMessage[0].Equals("!lcmapuser"))
+                {
+                    await message.Channel.SendMessageAsync(mapUserHelpMsg);
+                    return;
+                }
+                string[] userlist = getMessage[1].Split("=");
+                if (userlist.Length == 2)
+                {
+                    string steamUsername = userlist[0].Trim().ToLower();
+                    string discordUsername = userlist[1].Trim().ToLower();
+                    AddUsernameToList(steamUsername, discordUsername);
+                    await message.Channel.SendMessageAsync($"Entered to list for steam: {steamUsername} mapped to {discordUsername}");
+                }
+            }
+            catch
+            {
+                await message.Channel.SendMessageAsync(mapUserHelpMsg);
+            }
+            return;
+        }
+
+        if (message.Channel.Name.Equals(_channelRead))
+        {
             // regex and check if message is valid and should send over to game or not
-            if (!message_regex.IsMatch(message.CleanContent))
+            if (!messageRegex.IsMatch(message.CleanContent))
                 return;
 
             string[] message_content = message.CleanContent.Split(": ");
             var username = message_content[0];
             var content = message_content[1];
-            // TODO username mapping here?
             AddTranscribeToQueue(username, content);
             return;
         }
