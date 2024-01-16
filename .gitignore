@@ -71,3 +71,6 @@ crashlytics-build.properties
 # CSProj Builds
 */bin/*
 */obj/*
+
+# Exclude all DLLs
+*.dll
