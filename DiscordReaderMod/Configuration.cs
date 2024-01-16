@@ -14,6 +14,6 @@ public class Configuration
         configDiscordBotToken = File.Bind("General",
             "DiscordBotToken",
             "",
-            "Please enter your own discord bot token ('Token' is needed, not public key or application id'). Create new bot via Discord Developer Portal");
+            "Please enter your own discord bot token ('Token' is needed, not public key or application id). Create new bot via Discord Developer Portal");
     }
 }
