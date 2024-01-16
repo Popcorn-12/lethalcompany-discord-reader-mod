@@ -26,7 +26,7 @@ public class DiscordIngameProcess
     [HarmonyPatch(typeof(PlayerControllerB), "Update")]
     private static void SendTranscribeToHUD(PlayerControllerB playerControllerB)
     {
-        _log.LogInfo("SendTranscribeMessage?");
+        _log.LogInfo("SendTranscribeToHUD?");
         if (_queue.Count == 0)
             return;
 

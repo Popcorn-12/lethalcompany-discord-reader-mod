@@ -43,6 +43,8 @@ public class DiscordAPI
 
     public static async Task Shutdown()
     {
+        // TODO Find a way to properly shutdown discord bot
+        // Need to find hook to exit and call this method
         if (_client != null && _client.ConnectionState.Equals(ConnectionState.Connected))
         {
             _client.Dispose();
@@ -91,13 +93,12 @@ public class DiscordAPI
             // regex and check if message is valid and should send over to game or not
             if (!message_regex.IsMatch(message.CleanContent))
                 return;
-            // TODO send to game WHILE within game, not menu
+
             string[] message_content = message.CleanContent.Split(": ");
             var username = message_content[0];
             var content = message_content[1];
             // TODO username mapping here?
             AddTranscribeToQueue(username, content);
-            //await message.Channel.SendMessageAsync("TODO... I was listening here but feature is not implemented to send over to game yet.");
             return;
         }
 
