@@ -16,3 +16,4 @@
 # Exclude release folder
 /release/
 /.vs/DiscordReaderMod
+/.vs/ProjectEvaluation

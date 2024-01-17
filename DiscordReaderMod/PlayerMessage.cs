@@ -16,7 +16,7 @@ namespace DiscordReaderMod
         public string username { get; set; }
         public string message { get; set; }
 
-        public string formatted_message()
+        public string FormattedMessage()
         {
             return $"{username}: {message}";
         }

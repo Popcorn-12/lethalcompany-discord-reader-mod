@@ -57,7 +57,7 @@ public class DiscordIngameProcess
     {
         PlayerMessage playerMessage = new PlayerMessage(username, message);
         _queue.Enqueue(playerMessage);
-        _log.LogInfo("queue entered: " + playerMessage.formatted_message());
+        _log.LogInfo("queue entered: " + playerMessage.FormattedMessage());
     }
 
     // Process all input and determine based on when in game and promixity range to send message
@@ -76,17 +76,17 @@ public class DiscordIngameProcess
         if (_queue.Count == 0)
             return;
 
-        PlayerMessage current_message = _queue.Dequeue();
-        _log.LogInfo("Got queue message to send: " + current_message.formatted_message());
+        PlayerMessage currentMessage = _queue.Dequeue();
+        _log.LogInfo("Got queue message to send: " + currentMessage.FormattedMessage());
 
         var getPlayerId = -2;
         string getUsername = "";
         
         // Check if username is in mapping or not
-        if (!playerMapping.TryGetValue(current_message.username.ToLower(), out getUsername))
+        if (!playerMapping.TryGetValue(currentMessage.username.ToLower(), out getUsername))
         {
-            string system_message = $"<color={whiteColor}>Please use !lcmapuser in discord for {current_message.username}</color>";
-            HUDManager.Instance.AddTextToChatOnServer(system_message);
+            string systemMessage = $"<color={whiteColor}>Please use !lcmapuser in discord for {currentMessage.username}</color>";
+            HUDManager.Instance.AddTextToChatOnServer(systemMessage);
             return;
         }
 
@@ -107,7 +107,7 @@ public class DiscordIngameProcess
 
         if (getPlayerId == -2)
         {
-            string system_message = $"<color={whiteColor}>Please use !lcmapuser in discord for {current_message.username} or player is not found ingame</color>";
+            string system_message = $"<color={whiteColor}>Please use !lcmapuser in discord for {currentMessage.username} or player is not found ingame</color>";
             HUDManager.Instance.AddTextToChatOnServer(system_message);
             return;
         }
@@ -116,11 +116,12 @@ public class DiscordIngameProcess
             // Can't send transcribe for dead player
             if (component != null && component.isPlayerDead)
                 return;
-            string colored_message = $"<color={transcribeColor}>{current_message.message}</color>";
+            string colored_message = $"<color={transcribeColor}>{currentMessage.message}</color>";
+
             HUDManager.Instance.AddTextToChatOnServer(colored_message, getPlayerId);
         }
         
-        _log.LogInfo($"Sent transcribe to HUD manager for {current_message.username}");
+        _log.LogInfo($"Sent transcribe to HUD manager for {currentMessage.username}");
     }
 
 
